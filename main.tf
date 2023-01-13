@@ -338,7 +338,7 @@ resource "google_pubsub_subscription" "bigquery_subscriptions" {
 }
 
 resource "google_pubsub_subscription_iam_member" "pull_subscription_sa_binding_subscriber" {
-  for_each = var.create_subscriptions ? { for i in var.pull_subscriptions : i.name => i if lookup(i, "service_account", null) != null } : {}
+  for_each = var.create_subscriptions ? { for i in var.pull_subscriptions : i.name => i if lookup(i, "create_permissions", false) != false } : {}
 
   project      = var.project_id
   subscription = each.value.name
@@ -350,7 +350,7 @@ resource "google_pubsub_subscription_iam_member" "pull_subscription_sa_binding_s
 }
 
 resource "google_pubsub_subscription_iam_member" "pull_subscription_sa_binding_viewer" {
-  for_each = var.create_subscriptions ? { for i in var.pull_subscriptions : i.name => i if lookup(i, "service_account", null) != null } : {}
+  for_each = var.create_subscriptions ? { for i in var.pull_subscriptions : i.name => i if lookup(i, "create_permissions", false) != false } : {}
 
   project      = var.project_id
   subscription = each.value.name
